@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TrafficVision AI — Intelligent Traffic Violation Detection, Hotspot Analytics & Enforcement Recommendation Platform powered by YOLOv11, OCR, and Predictive AI." />
+  <meta name="theme-color" content="#0a0e1a" />
+  <title>TrafficVision AI — Traffic Violation Intelligence Platform</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/charts.css" />
+  <link rel="stylesheet" href="css/pages.css" />
+</head>
+<body>
+<div id="app">
+
+  <!-- ══════════════════════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════════════════════════ -->
+  <aside class="sidebar">
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+      </div>
+      <div class="sidebar-logo-text">
+        <div class="sidebar-logo-title">TrafficVision AI</div>
+        <div class="sidebar-logo-sub">Enforcement Platform</div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Monitoring</div>
+
+      <div class="nav-item active" data-page="dashboard">
+        <div class="nav-item-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        Live Dashboard
+        <span class="nav-item-badge" id="live-badge-count">LIVE</span>
+      </div>
+
+      <div class="nav-item" data-page="detection">
+        <div class="nav-item-icon">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35"/></svg>
+        </div>
+        Detection Lab
+      </div>
+
+      <div class="nav-section-label">Intelligence</div>
+
+      <div class="nav-item" data-page="hotspot">
+        <div class="nav-item-icon">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z"/></svg>
+        </div>
+        Hotspot Map
+      </div>
+
+      <div class="nav-item" data-page="analytics">
+        <div class="nav-item-icon">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"/></svg>
+        </div>
+        Analytics
+      </div>
+
+      <div class="nav-section-label">Records</div>
+
+      <div class="nav-item" data-page="plates">
+        <div class="nav-item-icon">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+        </div>
+        License Plates
+      </div>
+
+      <div class="nav-item" data-page="evidence">
+        <div class="nav-item-icon">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+        </div>
+        Evidence
+      </div>
+
+      <div class="nav-section-label">Operations</div>
+
+      <div class="nav-item" data-page="enforcement">
+        <div class="nav-item-icon">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>
+        </div>
+        Enforcement AI
+      </div>
+
+      <div class="nav-item" data-page="predictions">
+        <div class="nav-item-icon">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"/></svg>
+        </div>
+        Predictions
+      </div>
+
+      <div class="nav-item" data-page="reports">
+        <div class="nav-item-icon">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"/></svg>
+        </div>
+        Reports
+      </div>
+    </nav>
+
+    <!-- Footer -->
+    <div class="sidebar-footer">
+      <div class="system-status">
+        <div class="status-dot"></div>
+        <div class="status-text">
+          <div class="status-label">All Systems Online</div>
+          <div class="status-sub">12 cameras active</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════════════════════════════
+       TOPBAR
+  ═══════════════════════════════════════════════════════════ -->
+  <header class="topbar">
+    <button class="topbar-btn" id="sidebar-toggle" aria-label="Toggle sidebar">
+      <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+    </button>
+
+    <div class="topbar-page-title">
+      <h2 id="topbar-title">Live Monitoring Dashboard</h2>
+      <p id="topbar-subtitle">Real-time traffic violation surveillance & alerts</p>
+    </div>
+
+    <!-- Live badge -->
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      LIVE
+    </div>
+
+    <!-- Clock -->
+    <div style="font-family:var(--font-mono);font-size:0.8125rem;color:var(--text-muted);white-space:nowrap" id="topbar-clock">00:00:00</div>
+
+    <div class="topbar-actions">
+      <!-- Notifications -->
+      <button class="topbar-btn" id="btn-notifications" aria-label="Notifications" onclick="AppUI.toggleNotifications()">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"/></svg>
+        <span class="topbar-notif-count" id="notif-badge">3</span>
+      </button>
+
+      <!-- Settings -->
+      <button class="topbar-btn" id="btn-settings" aria-label="Settings" onclick="AppUI.openSettings()">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
+      </button>
+
+      <!-- Avatar -->
+      <div class="topbar-avatar" title="Inspector Admin" id="topbar-avatar" onclick="AppUI.openProfile()" style="cursor:pointer">IA</div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════════════════════ -->
+  <main class="main-content">
+
+    <!-- ════════════════════════════════════════════════════
+         PAGE 1: LIVE MONITORING DASHBOARD
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-view active" id="page-dashboard">
+      <!-- KPI Grid -->
+      <div class="kpi-grid">
+        <div class="stat-card accent-blue">
+          <div class="stat-card-header">
+            <div class="stat-card-icon blue">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"/></svg>
+            </div>
+            <span class="stat-card-trend up">▲ 12%</span>
+          </div>
+          <div class="stat-card-value" id="kpi-today">0</div>
+          <div class="stat-card-label">Violations Today</div>
+          <div class="stat-card-sub">vs 245 yesterday</div>
+        </div>
+        <div class="stat-card accent-red">
+          <div class="stat-card-header">
+            <div class="stat-card-icon red">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"/></svg>
+            </div>
+            <span class="stat-card-trend up">▲ 8%</span>
+          </div>
+          <div class="stat-card-value" id="kpi-alerts">0</div>
+          <div class="stat-card-label">Pending Alerts</div>
+          <div class="stat-card-sub">Requires immediate action</div>
+        </div>
+        <div class="stat-card accent-orange">
+          <div class="stat-card-header">
+            <div class="stat-card-icon orange">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg>
+            </div>
+            <span class="stat-card-trend flat">— 0</span>
+          </div>
+          <div class="stat-card-value" id="kpi-zones">0</div>
+          <div class="stat-card-label">High-Risk Zones</div>
+          <div class="stat-card-sub">Risk score ≥ 85</div>
+        </div>
+        <div class="stat-card accent-green">
+          <div class="stat-card-header">
+            <div class="stat-card-icon green">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+            </div>
+            <span class="stat-card-trend up">▲ 1.2%</span>
+          </div>
+          <div class="stat-card-value" id="kpi-accuracy">0%</div>
+          <div class="stat-card-label">AI Accuracy</div>
+          <div class="stat-card-sub">mAP@0.5 score</div>
+        </div>
+      </div>
+
+      <!-- Main Grid -->
+      <div class="main-grid">
+        <!-- Camera Feeds -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
+              Live Camera Feeds
+            </div>
+            <div class="panel-actions">
+              <span class="badge badge-danger animate-pulse">● 4/4 ACTIVE</span>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="camera-grid">
+              <div class="camera-grid-item">
+                <canvas id="canvas-cam1" width="320" height="240"></canvas>
+                <div class="camera-grid-item-label">📍 SG Highway Junction · CAM-SG-001</div>
+                <div class="camera-grid-item-status active"></div>
+              </div>
+              <div class="camera-grid-item">
+                <canvas id="canvas-cam2" width="320" height="240"></canvas>
+                <div class="camera-grid-item-label">📍 Drive-in Road · CAM-DRV-001</div>
+                <div class="camera-grid-item-status active"></div>
+              </div>
+              <div class="camera-grid-item">
+                <canvas id="canvas-cam3" width="320" height="240"></canvas>
+                <div class="camera-grid-item-label">📍 Thaltej Crossroads · CAM-THA-001</div>
+                <div class="camera-grid-item-status active"></div>
+              </div>
+              <div class="camera-grid-item">
+                <canvas id="canvas-cam4" width="320" height="240"></canvas>
+                <div class="camera-grid-item-label">📍 Naranpura Circle · CAM-NAR-001</div>
+                <div class="camera-grid-item-status active"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Feed -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/></svg>
+              Violation Feed
+            </div>
+            <span class="live-badge" style="font-size:0.65rem; padding:2px 8px">
+              <div class="live-dot"></div> LIVE
+            </span>
+          </div>
+          <div class="violation-feed-header">
+            <span>TYPE</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span>PLATE · LOCATION</span>
+            <span style="margin-left:auto">TIME</span>
+          </div>
+          <div class="live-feed-scroll" id="live-feed-list"></div>
+        </div>
+      </div>
+
+      <!-- Bottom Grid -->
+      <div class="bottom-grid">
+        <!-- Violation Breakdown -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Violation Breakdown</div>
+            <span class="badge badge-primary">Last 30 Days</span>
+          </div>
+          <div class="panel-body" id="violation-bars"></div>
+        </div>
+
+        <!-- Top Zones -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg>
+              Top Enforcement Zones
+            </div>
+            <button class="btn btn-sm btn-secondary" onclick="Router.navigate('hotspot')">View Map</button>
+          </div>
+          <div class="panel-body p-0" id="dash-top-zones"></div>
+        </div>
+      </div>
+    </div><!-- /page-dashboard -->
+
+    <!-- ════════════════════════════════════════════════════
+         PAGE 2: DETECTION LAB
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-view" id="page-detection">
+      <div class="page-header">
+        <div class="page-header-info">
+          <div class="page-header-title">🔬 Violation Detection Lab</div>
+          <div class="page-header-sub">Upload traffic images for AI-powered multi-violation analysis using YOLOv11 + DeepSORT pipeline</div>
+        </div>
+        <div class="page-header-actions">
+          <span id="detection-count-badge" class="badge badge-danger hidden"></span>
+          <button class="btn btn-primary" id="btn-run-demo">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"/></svg>
+            Run Demo Analysis
+          </button>
+        </div>
+      </div>
+
+      <!-- Upload + Canvas + Results -->
+      <div class="detection-layout" style="margin-bottom:var(--space-5)">
+        <!-- Canvas Area -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Detection Canvas</div>
+            <div class="panel-actions">
+              <span class="badge badge-cyan">YOLOv11 · RT-DETR</span>
+            </div>
+          </div>
+          <div class="panel-body p-0">
+            <!-- Upload zone (shown initially) -->
+            <div class="upload-zone" id="upload-zone" style="margin:var(--space-4); border-radius:var(--radius-lg)">
+              <div class="upload-zone-icon">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5"/></svg>
+              </div>
+              <div class="upload-zone-title">Drop Traffic Image Here</div>
+              <div class="upload-zone-sub">Supports JPG, PNG, WEBP · Max 10MB · Or click Run Demo Analysis</div>
+              <input type="file" id="upload-input" accept="image/*" style="display:none">
+            </div>
+            <!-- Detection canvas (hidden initially) -->
+            <div class="detection-canvas-wrapper" id="detection-canvas-wrapper" style="margin:var(--space-4); display:none">
+              <canvas id="detection-canvas" style="width:100%;height:auto;display:block"></canvas>
+              <!-- Processing overlay -->
+              <div class="processing-overlay hidden" id="processing-overlay">
+                <div class="processing-spinner"></div>
+                <div style="color:var(--text-primary);font-weight:700;font-size:0.9375rem">Analyzing Image…</div>
+                <div class="processing-steps">
+                  <div class="processing-step" data-step="0"><div class="processing-step-dot"></div> Image Enhancement</div>
+                  <div class="processing-step" data-step="1"><div class="processing-step-dot"></div> Object Detection</div>
+                  <div class="processing-step" data-step="2"><div class="processing-step-dot"></div> Violation Analysis</div>
+                  <div class="processing-step" data-step="3"><div class="processing-step-dot"></div> License Plate OCR</div>
+                  <div class="processing-step" data-step="4"><div class="processing-step-dot"></div> Evidence Generation</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Detection Results</div>
+            <span class="badge badge-muted">AI Output</span>
+          </div>
+          <div class="panel-body">
+            <div id="detection-results-panel">
+              <div class="empty-state">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/></svg>
+                <p>Run an analysis to see detection results</p>
+              </div>
+            </div>
+
+            <!-- Model Info Box -->
+            <div style="margin-top:var(--space-5); background:var(--bg-surface-2); border:1px solid var(--border); border-radius:var(--radius-md); padding:var(--space-4)">
+              <div class="text-xs text-muted" style="margin-bottom:var(--space-3); font-weight:700; letter-spacing:0.08em; text-transform:uppercase">AI Pipeline Status</div>
+              <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+                <div style="display:flex;justify-content:space-between;font-size:0.8125rem">
+                  <span style="color:var(--text-muted)">Detection Model</span>
+                  <span class="badge badge-success">YOLOv11 ✓</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:0.8125rem">
+                  <span style="color:var(--text-muted)">Object Tracking</span>
+                  <span class="badge badge-success">DeepSORT ✓</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:0.8125rem">
+                  <span style="color:var(--text-muted)">Plate OCR</span>
+                  <span class="badge badge-success">PaddleOCR ✓</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:0.8125rem">
+                  <span style="color:var(--text-muted)">GPU Inference</span>
+                  <span class="badge badge-cyan">RTX 4090 — 124ms</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Violation Type Cards -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Violation Type Counters</div>
+          <span class="badge badge-primary">Live Total</span>
+        </div>
+        <div class="panel-body">
+          <div class="violation-types-grid" id="vtype-grid">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-detection -->
+
+    <!-- ════════════════════════════════════════════════════
+         PAGE 3: HOTSPOT MAP
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-view" id="page-hotspot">
+      <div class="page-header">
+        <div class="page-header-info">
+          <div class="page-header-title">🗺️ GIS Violation Hotspot Intelligence</div>
+          <div class="page-header-sub">Real-time violation heatmap powered by Leaflet.js · Ahmedabad, Gujarat</div>
+        </div>
+        <div class="page-header-actions">
+          <div class="heatmap-legend">
+            <div class="heatmap-gradient"></div>
+            <span class="text-xs text-muted">Low</span>
+            <span class="text-xs text-muted" style="margin-left:auto">High</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="map-controls panel" style="padding:var(--space-4) var(--space-5); margin-bottom:var(--space-4)">
+        <div style="display:flex;gap:var(--space-3);align-items:center;flex-wrap:wrap">
+          <span class="text-sm font-600">Filter:</span>
+          <button class="filter-pill active map-filter-pill" data-type="all">All Types</button>
+          <button class="filter-pill map-filter-pill" data-type="helmet">🪖 Helmet</button>
+          <button class="filter-pill map-filter-pill" data-type="redlight">🚦 Red Light</button>
+          <button class="filter-pill map-filter-pill" data-type="triple">🏍️ Triple Riding</button>
+          <button class="filter-pill map-filter-pill" data-type="parking">🅿️ Parking</button>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:var(--space-3)">
+            <span class="text-xs text-muted">Time of Day:</span>
+            <div class="time-slider-wrapper" style="min-width:150px">
+              <div class="time-slider-label">
+                <span>00:00</span>
+                <span id="time-range-label">All Day</span>
+                <span>23:00</span>
+              </div>
+              <input type="range" class="custom-slider" id="time-range-slider" min="0" max="24" value="24" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-layout">
+        <!-- Map -->
+        <div>
+          <div id="map-container"></div>
+        </div>
+
+        <!-- Top Zones Panel -->
+        <div>
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">🏆 Top Enforcement Zones</div>
+            </div>
+            <div class="panel-body p-0" id="top-zones-panel"></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-hotspot -->
+
+    <!-- ════════════════════════════════════════════════════
+         PAGE 4: ANALYTICS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-view" id="page-analytics">
+      <div class="page-header">
+        <div class="page-header-info">
+          <div class="page-header-title">📊 Analytics & Trends</div>
+          <div class="page-header-sub">Comprehensive violation pattern analysis · Last 30 days</div>
+        </div>
+        <div class="page-header-actions">
+          <div style="display:flex;gap:var(--space-4)">
+            <div style="text-align:center">
+              <div id="analytics-total" style="font-size:1.375rem;font-weight:800;font-family:var(--font-mono);color:var(--text-primary)">0</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em">Total</div>
+            </div>
+            <div style="text-align:center">
+              <div id="analytics-today" style="font-size:1.375rem;font-weight:800;font-family:var(--font-mono);color:var(--primary)">0</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em">Today</div>
+            </div>
+            <div style="text-align:center">
+              <div id="analytics-fines" style="font-size:1.375rem;font-weight:800;font-family:var(--font-mono);color:var(--accent)">₹0</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em">Fines</div>
+            </div>
+            <div style="text-align:center">
+              <div id="analytics-accuracy" style="font-size:1.375rem;font-weight:800;font-family:var(--font-mono);color:var(--warning)">0%</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em">Accuracy</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row 1 -->
+      <div class="analytics-grid" style="margin-bottom:var(--space-5)">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Weekly Trend (7 Days)</div>
+            <span class="badge badge-primary">Line Chart</span>
+          </div>
+          <div class="panel-body">
+            <div class="chart-wrap" style="height:200px"><canvas id="chart-daily-trend"></canvas></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Violation Type Distribution</div>
+            <span class="badge badge-purple">Donut</span>
+          </div>
+          <div class="panel-body" style="position:relative">
+            <div class="chart-wrap" style="height:200px; position:relative">
+              <canvas id="chart-type-donut"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row 2 -->
+      <div class="analytics-grid" style="margin-bottom:var(--space-5)">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Hourly Distribution (24h)</div>
+            <span class="badge badge-warning">Peak Hours</span>
+          </div>
+          <div class="panel-body">
+            <div class="chart-wrap" style="height:200px"><canvas id="chart-hourly"></canvas></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">30-Day Violation Trend</div>
+            <span class="badge badge-cyan">Bar Chart</span>
+          </div>
+          <div class="panel-body">
+            <div class="chart-wrap" style="height:200px"><canvas id="chart-monthly-trend"></canvas></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Peak Hours Heatmap -->
+      <div class="panel" style="margin-bottom:var(--space-5)">
+        <div class="panel-header">
+          <div class="panel-title">Peak Hours Heatmap (Day × Hour)</div>
+          <div style="display:flex;gap:var(--space-3);align-items:center">
+            <div style="width:80px;height:8px;border-radius:4px;background:linear-gradient(90deg,hsl(222,28%,14%),hsl(200,90%,55%),hsl(38,95%,58%),hsl(0,85%,60%))"></div>
+            <span class="text-xs text-muted">Low → High</span>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="peak-grid-wrapper">
+            <div id="peak-hours-grid"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location Chart -->
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">Top Violation Locations</div>
+          <span class="badge badge-danger">Risk Ranking</span>
+        </div>
+        <div class="panel-body">
+          <div class="chart-wrap" style="height:300px"><canvas id="chart-location"></canvas></div>
+        </div>
+      </div>
+    </div><!-- /page-analytics -->
+
+    <!-- ════════════════════════════════════════════════════
+         PAGE 5: LICENSE PLATES
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-view" id="page-plates">
+      <div class="page-header">
+        <div class="page-header-info">
+          <div class="page-header-title">🚗 License Plate Registry</div>
+          <div class="page-header-sub">Searchable violation records with vehicle history · Powered by PaddleOCR + EasyOCR</div>
+        </div>
+        <div class="page-header-actions">
+          <span id="plates-count" class="plates-count-tag">0 records</span>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="plates-toolbar panel" style="padding:var(--space-4) var(--space-5)">
+        <div class="search-bar">
+          <div class="search-bar-icon">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35"/></svg>
+          </div>
+          <input type="text" id="plate-search-input" placeholder="Search plate, location, type…" />
+        </div>
+        <select id="plate-type-filter" style="height:36px;min-width:160px"></select>
+        <select id="plate-sev-filter" style="height:36px;min-width:120px">
+          <option value="">All Severity</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+        <select id="plate-status-filter" style="height:36px;min-width:150px">
+          <option value="">All Status</option>
+          <option value="Pending">Pending</option>
+          <option value="Challan Issued">Challan Issued</option>
+          <option value="Paid">Paid</option>
+          <option value="Under Review">Under Review</option>
+        </select>
+        <div style="margin-left:auto;display:flex;gap:var(--space-2)">
+          <div style="display:flex;align-items:center;gap:var(--space-2);font-size:0.75rem;color:var(--text-muted)">
+            <span style="width:12px;height:12px;background:var(--danger);border-radius:2px;display:inline-block"></span>
+            ⚠ Repeat Offender
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="panel" style="margin-top:var(--space-4)">
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Plate Number</th>
+                <th>Violation Type</th>
+                <th>Location</th>
+                <th>Date & Time</th>
+                <th>Confidence</th>
+                <th>Severity</th>
+                <th>Status</th>
+                <th>Fine</th>
+                <th>Offender</th>
+              </tr>
+            </thead>
+            <tbody id="plates-tbody">
+              <tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted)">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="plates-pagination" class="pagination"></div>
+      </div>
+    </div><!-- /page-plates -->
+
+    <!-- ════════════════════════════════════════════════════
+         PAGE 6: ENFORCEMENT INTELLIGENCE
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-view" id="page-enforcement">
+      <div class="page-header">
+        <div class="page-header-info">
+          <div class="page-header-title">🛡️ Enforcement Intelligence Engine</div>
+          <div class="page-header-sub">AI-driven patrol deployment, risk scoring & resource optimization</div>
+        </div>
+      </div>
+
+      <div class="enforcement-layout">
+        <!-- Risk Score Calculator -->
+        <div>
+          <div class="panel" style="margin-bottom:var(--space-5)">
+            <div class="panel-header">
+              <div class="panel-title">Risk Score Calculator</div>
+              <span class="badge badge-danger">Live Formula</span>
+            </div>
+            <div class="panel-body">
+              <!-- Formula -->
+              <div class="risk-formula">
+                <div class="text-xs text-muted" style="margin-bottom:var(--space-2);font-weight:700;letter-spacing:0.08em;text-transform:uppercase">Risk Formula</div>
+                <div class="risk-formula-equation">
+                  Risk = <span>ViolationFreq</span> × 0.35 +<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>TrafficDensity</span> × 0.25 +<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>AccidentHistory</span> × 0.25 +<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>CongestionImpact</span> × 0.15
+                </div>
+
+                <!-- Params -->
+                <div class="risk-param">
+                  <div class="risk-param-header">
+                    <span class="risk-param-label">Violation Frequency</span>
+                    <span class="risk-param-value" id="slider-val-violationFreq">75</span>
+                  </div>
+                  <input type="range" class="custom-slider" id="slider-violationFreq" min="0" max="100" value="75" />
+                </div>
+                <div class="risk-param">
+                  <div class="risk-param-header">
+                    <span class="risk-param-label">Traffic Density</span>
+                    <span class="risk-param-value" id="slider-val-trafficDensity">80</span>
+                  </div>
+                  <input type="range" class="custom-slider" id="slider-trafficDensity" min="0" max="100" value="80" />
+                </div>
+                <div class="risk-param">
+                  <div class="risk-param-header">
+                    <span class="risk-param-label">Accident History</span>
+                    <span class="risk-param-value" id="slider-val-accidentHistory">60</span>
+                  </div>
+                  <input type="range" class="custom-slider" id="slider-accidentHistory" min="0" max="100" value="60" />
+                </div>
+                <div class="risk-param">
+                  <div class="risk-param-header">
+                    <span class="risk-param-label">Congestion Impact</span>
+                    <span class="risk-param-value" id="slider-val-congestionImpact">70</span>
+                  </div>
+                  <input type="range" class="custom-slider" id="slider-congestionImpact" min="0" max="100" value="70" />
+                </div>
+              </div>
+
+              <!-- Risk Ring Display -->
+              <div style="text-align:center;padding:var(--space-4) 0">
+                <div class="risk-score-ring">
+                  <svg viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="54" fill="none" stroke="hsl(222,24%,15%)" stroke-width="10"/>
+                    <circle id="risk-ring-fill" cx="60" cy="60" r="54" fill="none"
+                      stroke="#ef4444" stroke-width="10"
+                      stroke-dasharray="339.3" stroke-dashoffset="100"
+                      stroke-linecap="round"
+                      style="transition:stroke-dashoffset 0.6s ease, stroke 0.4s ease"/>
+                  </svg>
+                  <div class="risk-score-value">
+                    <div class="risk-score-number" id="risk-score-number">74</div>
+                    <div class="risk-score-label">Risk Score</div>
+                  </div>
+                </div>
+                <div style="font-size:0.875rem;font-weight:700;margin-top:var(--space-2)" id="risk-level-label" style="color:var(--warning)">HIGH</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Resource Allocation -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Resource Allocation</div>
+            </div>
+            <div class="panel-body" id="resource-allocation"></div>
+          </div>
+        </div>
+
+        <!-- Recommendations + Fine Collection -->
+        <div>
+          <div class="panel" style="margin-bottom:var(--space-5)">
+            <div class="panel-header">
+              <div class="panel-title">AI Patrol Recommendations</div>
+              <span class="badge badge-warning">Priority Order</span>
+            </div>
+            <div class="panel-body" id="enforcement-recommendations"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Fine Collection Dashboard</div>
+            </div>
+            <div class="panel-body" id="fine-collection"></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-enforcement -->
+
+    <!-- ════════════════════════════════════════════════════
+         PAGE 7: PREDICTIONS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-view" id="page-predictions">
+      <div class="page-header">
+        <div class="page-header-info">
+          <div class="page-header-title">🔮 Predictive Violation Forecasting</div>
+          <div class="page-header-sub">LSTM + XGBoost ensemble · 24-hour violation prediction with confidence intervals</div>
+        </div>
+        <div class="page-header-actions">
+          <div style="display:flex;gap:var(--space-5);align-items:center">
+            <div style="text-align:center">
+              <div id="pred-accuracy" style="font-size:1.25rem;font-weight:800;color:var(--accent);font-family:var(--font-mono)">–</div>
+              <div class="text-xs text-muted">Accuracy</div>
+            </div>
+            <div style="text-align:center">
+              <div id="pred-mae" style="font-size:1.25rem;font-weight:800;color:var(--primary);font-family:var(--font-mono)">–</div>
+              <div class="text-xs text-muted">MAE Score</div>
+            </div>
+            <div style="text-align:center">
+              <div id="pred-r2" style="font-size:1.25rem;font-weight:800;color:var(--purple);font-family:var(--font-mono)">–</div>
+              <div class="text-xs text-muted">R² Score</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 24-hour Forecast -->
+      <div class="panel" style="margin-bottom:var(--space-5)">
+        <div class="panel-header">
+          <div class="panel-title">24-Hour Violation Forecast</div>
+          <div class="forecast-legend">
+            <div class="forecast-legend-item">
+              <div class="forecast-legend-line" style="background:var(--primary)"></div>
+              Predicted
+            </div>
+            <div class="forecast-legend-item">
+              <div class="forecast-legend-line" style="background:var(--primary);opacity:0.3;border:1px dashed var(--primary)"></div>
+              Confidence Band
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="chart-wrap" style="height:260px"><canvas id="chart-forecast"></canvas></div>
+        </div>
+      </div>
+
+      <div class="predictions-layout">
+        <!-- Zone Risk Predictions -->
+        <div>
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Zone Risk Predictions</div>
+              <span class="badge badge-primary">Next 2h Forecast</span>
+            </div>
+            <div class="panel-body p-0">
+              <div class="table-wrapper" style="border:none">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>Zone</th>
+                      <th>Current Risk</th>
+                      <th>Predicted Risk</th>
+                      <th>Trend</th>
+                      <th>ETA</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="zone-predictions-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Weekly Chart -->
+          <div class="panel" style="margin-top:var(--space-5)">
+            <div class="panel-header">
+              <div class="panel-title">Weekly Pattern: Predicted vs Actual</div>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap" style="height:180px"><canvas id="chart-weekly-pattern"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Weather Factors + Model Info -->
+        <div>
+          <div class="panel" style="margin-bottom:var(--space-5)">
+            <div class="panel-header">
+              <div class="panel-title">Environmental Factors</div>
+            </div>
+            <div class="panel-body" id="weather-factors"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Model Information</div>
+            </div>
+            <div class="panel-body">
+              <div style="display:flex;flex-direction:column;gap:var(--space-3)">
+                <div style="display:flex;justify-content:space-between;padding-bottom:var(--space-2);border-bottom:1px solid var(--border)">
+                  <span class="text-sm text-muted">Model Type</span>
+                  <span class="text-sm font-600" id="pred-model-type">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding-bottom:var(--space-2);border-bottom:1px solid var(--border)">
+                  <span class="text-sm text-muted">Last Trained</span>
+                  <span class="text-sm font-600" id="pred-last-trained">—</span>
+                </div>
+                <div style="display:flex;justify-content:space-between">
+                  <span class="text-sm text-muted">Training Data Points</span>
+                  <span class="text-sm font-600" id="pred-data-points">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-predictions -->
+
+    <!-- ════════════════════════════════════════════════════
+         PAGE 8: EVIDENCE
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-view" id="page-evidence">
+      <div class="page-header">
+        <div class="page-header-info">
+          <div class="page-header-title">📁 Digital Evidence Management</div>
+          <div class="page-header-sub">Court-admissible AI-certified evidence packages with SHA-256 hash verification</div>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-primary" id="btn-export-all-evidence" onclick="EvidenceModule.exportAllEvidence()">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+            Export All Evidence
+          </button>
+        </div>
+      </div>
+
+      <div class="evidence-grid" id="evidence-grid-container"></div>
+    </div><!-- /page-evidence -->
+
+    <!-- ════════════════════════════════════════════════════
+         PAGE 9: REPORTS
+    ═══════════════════════════════════════════════════════ -->
+    <div class="page-view" id="page-reports">
+      <div class="page-header">
+        <div class="page-header-info">
+          <div class="page-header-title">📋 Reports & Export</div>
+          <div class="page-header-sub">Summary statistics, violation breakdowns, and multi-format export</div>
+        </div>
+        <div class="page-header-actions">
+          <button class="btn btn-secondary" id="btn-export-csv">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+            Export CSV
+          </button>
+          <button class="btn btn-secondary" id="btn-export-xls">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+            Export Excel
+          </button>
+          <button class="btn btn-primary" id="btn-export-pdf">
+            <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+            Export PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Summary Stats Grid -->
+      <div class="report-summary-grid">
+        <div class="report-block">
+          <div class="report-block-value" id="rpt-total" style="color:var(--primary)">0</div>
+          <div class="report-block-label">Total Violations</div>
+        </div>
+        <div class="report-block">
+          <div class="report-block-value" id="rpt-today" style="color:var(--cyan)">0</div>
+          <div class="report-block-label">Today's Violations</div>
+        </div>
+        <div class="report-block">
+          <div class="report-block-value" id="rpt-high" style="color:var(--danger)">0</div>
+          <div class="report-block-label">High Severity</div>
+        </div>
+        <div class="report-block">
+          <div class="report-block-value" id="rpt-pending" style="color:var(--warning)">0</div>
+          <div class="report-block-label">Pending Cases</div>
+        </div>
+        <div class="report-block">
+          <div class="report-block-value" id="rpt-challan" style="color:var(--primary)">0</div>
+          <div class="report-block-label">Challans Issued</div>
+        </div>
+        <div class="report-block">
+          <div class="report-block-value" id="rpt-paid" style="color:var(--accent)">0</div>
+          <div class="report-block-label">Fines Paid</div>
+        </div>
+        <div class="report-block">
+          <div class="report-block-value" id="rpt-fines" style="color:var(--success)">₹0</div>
+          <div class="report-block-label">Total Fines Levied</div>
+        </div>
+        <div class="report-block">
+          <div class="report-block-value" id="rpt-collected" style="color:var(--accent)">₹0</div>
+          <div class="report-block-label">Amount Collected</div>
+        </div>
+        <div class="report-block">
+          <div class="report-block-value" id="rpt-cameras" style="color:var(--purple)">0</div>
+          <div class="report-block-label">Active Cameras</div>
+        </div>
+        <div class="report-block">
+          <div class="report-block-value" id="rpt-zones" style="color:var(--cyan)">0</div>
+          <div class="report-block-label">Monitored Zones</div>
+        </div>
+        <div class="report-block">
+          <div class="report-block-value" id="rpt-accuracy" style="color:var(--success)">0%</div>
+          <div class="report-block-label">AI Accuracy</div>
+        </div>
+        <div class="report-block">
+          <div class="report-block-value" id="rpt-uptime" style="color:var(--accent)">0%</div>
+          <div class="report-block-label">System Uptime</div>
+        </div>
+      </div>
+
+      <!-- Report Layout -->
+      <div class="report-layout">
+        <!-- 30-day Trend Chart -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">30-Day Violation Trend Report</div>
+          </div>
+          <div class="panel-body">
+            <div class="chart-wrap" style="height:260px"><canvas id="chart-report-trend"></canvas></div>
+          </div>
+        </div>
+
+        <!-- Type Breakdown Table -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Violation Type Breakdown</div>
+          </div>
+          <div class="panel-body p-0">
+            <div class="table-wrapper" style="border:none">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Count</th>
+                    <th>%</th>
+                    <th>Distribution</th>
+                    <th>Avg Fine</th>
+                    <th>Severity</th>
+                  </tr>
+                </thead>
+                <tbody id="report-type-breakdown"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /page-reports -->
+
+  </main><!-- /main-content -->
+
+  <!-- ══════════════════════════════════════════════════════
+       MODALS
+  ═══════════════════════════════════════════════════════════ -->
+
+  <!-- Violation Quick-View Modal -->
+  <div class="modal-overlay hidden" id="violation-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">Violation Details</div>
+        <button class="modal-close" data-close-modal="violation-modal">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size:1.25rem;font-weight:800;margin-bottom:var(--space-4)" id="vm-type">—</div>
+        <div class="evidence-meta-grid" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="evidence-meta-item"><div class="evidence-meta-label">Plate</div><div class="evidence-meta-value font-mono" style="color:var(--cyan)" id="vm-plate">—</div></div>
+          <div class="evidence-meta-item"><div class="evidence-meta-label">Confidence</div><div class="evidence-meta-value" style="color:var(--accent)" id="vm-confidence">—</div></div>
+          <div class="evidence-meta-item"><div class="evidence-meta-label">Severity</div><div id="vm-severity" class="badge">—</div></div>
+          <div class="evidence-meta-item"><div class="evidence-meta-label">Location</div><div class="evidence-meta-value" id="vm-location">—</div></div>
+          <div class="evidence-meta-item"><div class="evidence-meta-label">Date & Time</div><div class="evidence-meta-value" id="vm-time">—</div></div>
+          <div class="evidence-meta-item"><div class="evidence-meta-label">Camera</div><div class="evidence-meta-value" id="vm-camera">—</div></div>
+          <div class="evidence-meta-item"><div class="evidence-meta-label">Status</div><div class="evidence-meta-value" id="vm-status">—</div></div>
+          <div class="evidence-meta-item"><div class="evidence-meta-label">Fine Amount</div><div class="evidence-meta-value" style="color:var(--danger)" id="vm-fine">—</div></div>
+          <div class="evidence-meta-item"><div class="evidence-meta-label">Evidence ID</div><div class="evidence-meta-value font-mono text-xs" id="vm-evidence">—</div></div>
+        </div>
+        <div style="display:flex;gap:var(--space-3);margin-top:var(--space-5)">
+          <button class="btn btn-primary" style="flex:1" onclick="Router.navigate('evidence');document.getElementById('violation-modal').classList.add('hidden')">View Evidence</button>
+          <button class="btn btn-danger" style="flex:1" onclick="DashboardModule.issueChallan(this)">Issue Challan</button>
+          <button class="btn btn-secondary" data-close-modal="violation-modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vehicle History Modal -->
+  <div class="modal-overlay hidden" id="vehicle-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">
+          Vehicle History — <span class="font-mono" style="color:var(--cyan)" id="vm-plate-title"></span>
+        </div>
+        <button class="modal-close" data-close-modal="vehicle-modal">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex;gap:var(--space-5);margin-bottom:var(--space-5)">
+          <div class="report-block" style="flex:1">
+            <div class="report-block-value" style="color:var(--danger);font-size:1.75rem" id="vm-total-violations">0</div>
+            <div class="report-block-label">Total Violations</div>
+          </div>
+          <div class="report-block" style="flex:1">
+            <div class="report-block-value" style="color:var(--warning);font-size:1.75rem" id="vm-total-fines">₹0</div>
+            <div class="report-block-label">Total Fines</div>
+          </div>
+        </div>
+        <div id="vm-violation-list" style="max-height:350px;overflow-y:auto"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Evidence Detail Modal -->
+  <div class="modal-overlay hidden" id="evidence-modal">
+    <div class="modal-box" style="max-width:700px">
+      <div class="modal-header">
+        <div class="modal-title">Evidence Package — <span class="font-mono text-xs" id="evm-id"></span></div>
+        <button class="modal-close" data-close-modal="evidence-modal">
+          <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <canvas id="evm-canvas" width="640" height="240" style="width:100%;border-radius:var(--radius-md);margin-bottom:var(--space-4)"></canvas>
+        <div style="background:var(--bg-surface-2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-5)">
+          <div class="text-xs text-muted" style="font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:var(--space-4)">AI Evidence Certificate</div>
+          <div class="evidence-meta-grid" style="grid-template-columns:1fr 1fr 1fr">
+            <div class="evidence-meta-item"><div class="evidence-meta-label">Violation Type</div><div class="evidence-meta-value" id="evm-type">—</div></div>
+            <div class="evidence-meta-item"><div class="evidence-meta-label">Plate Number</div><div class="evidence-meta-value font-mono" style="color:var(--cyan)" id="evm-plate">—</div></div>
+            <div class="evidence-meta-item"><div class="evidence-meta-label">Confidence</div><div class="evidence-meta-value" style="color:var(--accent)" id="evm-confidence">—</div></div>
+            <div class="evidence-meta-item"><div class="evidence-meta-label">Date & Time</div><div class="evidence-meta-value" id="evm-datetime">—</div></div>
+            <div class="evidence-meta-item"><div class="evidence-meta-label">Location</div><div class="evidence-meta-value" id="evm-location">—</div></div>
+            <div class="evidence-meta-item"><div class="evidence-meta-label">Camera ID</div><div class="evidence-meta-value" id="evm-camera">—</div></div>
+            <div class="evidence-meta-item"><div class="evidence-meta-label">GPS Lat</div><div class="evidence-meta-value font-mono text-xs" id="evm-lat">—</div></div>
+            <div class="evidence-meta-item"><div class="evidence-meta-label">GPS Lng</div><div class="evidence-meta-value font-mono text-xs" id="evm-lng">—</div></div>
+            <div class="evidence-meta-item"><div class="evidence-meta-label">Severity</div><div class="evidence-meta-value" id="evm-severity">—</div></div>
+            <div class="evidence-meta-item"><div class="evidence-meta-label">Fine</div><div class="evidence-meta-value" style="color:var(--danger)" id="evm-fine">—</div></div>
+            <div class="evidence-meta-item"><div class="evidence-meta-label">Status</div><div class="evidence-meta-value" id="evm-status">—</div></div>
+            <div class="evidence-meta-item"><div class="evidence-meta-label">AI Model</div><div class="evidence-meta-value text-xs" id="evm-model">—</div></div>
+          </div>
+          <div style="margin-top:var(--space-4);padding:var(--space-3);background:var(--bg-surface-3);border-radius:var(--radius-md);font-family:var(--font-mono);font-size:0.7rem;color:var(--text-muted);word-break:break-all" id="evm-hash">—</div>
+        </div>
+        <div style="display:flex;gap:var(--space-3);margin-top:var(--space-4)">
+          <button class="btn btn-primary" style="flex:1" onclick="EvidenceModule.downloadCertificate()">Download Certificate</button>
+          <button class="btn btn-secondary" data-close-modal="evidence-modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+</div><!-- /app -->
+
+<!-- ══════════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════════ -->
+<!-- Leaflet -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Leaflet Heat -->
+<script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+<!-- Data -->
+<script src="js/data/violations.js"></script>
+<script src="js/data/hotspots.js"></script>
+<script src="js/data/predictions.js"></script>
+
+<!-- Modules -->
+<script src="js/modules/router.js"></script>
+<script src="js/modules/dashboard.js"></script>
+<script src="js/modules/detection.js"></script>
+<script src="js/modules/analytics.js"></script>
+<script src="js/modules/heatmap.js"></script>
+<script src="js/modules/enforcement.js"></script>
+<script src="js/modules/search.js"></script>
+<script src="js/modules/evidence.js"></script>
+<script src="js/modules/predictions.js"></script>
+<script src="js/modules/reports.js"></script>
+<script src="js/modules/appui.js"></script>
+
+<!-- App Init -->
+<script src="js/app.js"></script>
+
+<!-- Inline fixes & page-specific init -->
+<script>
+  // Fix upload-zone show/hide for detection page
+  document.addEventListener('DOMContentLoaded', () => {
+    // Build violation type cards in detection lab
+    const grid = document.getElementById('vtype-grid');
+    if (grid && window.TrafficData) {
+      grid.innerHTML = window.TrafficData.VIOLATION_TYPES.map(vt => `
+        <div class="violation-type-card" style="--card-color:${vt.color}; border-top:2px solid ${vt.color}22">
+          <span class="violation-type-card-icon">${vt.icon}</span>
+          <div class="violation-type-card-name">${vt.label}</div>
+          <div class="violation-type-card-count" id="vtype-count-${vt.id}" style="color:${vt.color}">0</div>
+          <div class="text-xs text-muted" style="margin-top:4px">detected total</div>
+          <div class="progress-bar" style="margin-top:8px">
+            <div class="progress-fill" style="background:${vt.color};width:0%" 
+              data-target="${Math.round(Math.random()*70+30)}"
+              id="vbar-${vt.id}"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Override upload-zone to show canvas wrapper properly
+    const origBtnDemo = document.getElementById('btn-run-demo');
+    if (origBtnDemo) {
+      // Handled in DetectionModule
+    }
+
+    // Patch the detection canvas wrapper display
+    const dcanvas = document.getElementById('detection-canvas');
+    if (dcanvas) {
+      // Show the canvas wrapper when canvas is made visible
+      const observer = new MutationObserver(() => {
+        const wrapper = document.getElementById('detection-canvas-wrapper');
+        if (wrapper && !dcanvas.classList.contains('hidden')) {
+          wrapper.style.display = 'block';
+        }
+      });
+      observer.observe(dcanvas, { attributes: true, attributeFilter: ['class'] });
+    }
+  });
+
+  // Patch DetectionModule to use wrapper div visibility
+  document.addEventListener('DOMContentLoaded', () => {
+    const origRunDemo = DetectionModule ? DetectionModule.init : null;
+    const demoBtn = document.getElementById('btn-run-demo');
+    if (demoBtn) {
+      demoBtn.addEventListener('click', () => {
+        const zone    = document.getElementById('upload-zone');
+        const wrapper = document.getElementById('detection-canvas-wrapper');
+        const canvas  = document.getElementById('detection-canvas');
+        if (zone)    zone.style.display    = 'none';
+        if (wrapper) wrapper.style.display = 'block';
+        if (canvas)  canvas.style.display  = 'block';
+      }, true); // capture phase to run before DetectionModule handler
+    }
+
+    const uploadZone = document.getElementById('upload-zone');
+    if (uploadZone) {
+      uploadZone.addEventListener('click', () => {
+        const wrapper = document.getElementById('detection-canvas-wrapper');
+        // Will be shown after file is loaded by DetectionModule
+      });
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,540 @@
+/* ============================================================
+   PAGES.CSS — Page-specific layouts and overrides
+   TrafficVision AI
+   ============================================================ */
+
+/* ─── Page: Dashboard ────────────────────────────────────── */
+#page-dashboard .kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-5);
+  margin-bottom: var(--space-6);
+}
+
+#page-dashboard .main-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+#page-dashboard .bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+.live-feed-scroll {
+  max-height: 460px;
+  overflow-y: auto;
+}
+
+.violation-feed-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-surface-2);
+}
+
+/* Camera grid */
+.camera-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.camera-grid-item {
+  background: var(--bg-surface-2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 4/3;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.camera-grid-item:hover { border-color: var(--primary); }
+
+.camera-grid-item canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.camera-grid-item-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(0,0,0,0.85));
+  padding: var(--space-3);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: white;
+}
+
+.camera-grid-item-status {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.camera-grid-item-status.active {
+  background: var(--success);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* ─── Page: Detection Lab ────────────────────────────────── */
+#page-detection .detection-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+#page-detection .violation-types-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-4);
+}
+
+.detection-canvas-wrapper {
+  position: relative;
+  background: #000;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.detection-canvas-wrapper canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.detection-placeholder {
+  text-align: center;
+  color: var(--text-muted);
+  padding: var(--space-10);
+}
+
+.detection-placeholder svg {
+  width: 64px;
+  height: 64px;
+  fill: none;
+  stroke: var(--text-muted);
+  stroke-width: 1;
+  margin: 0 auto var(--space-4);
+  opacity: 0.3;
+}
+
+.processing-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  backdrop-filter: blur(4px);
+}
+
+.processing-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--bg-surface-3);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.processing-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 200px;
+}
+
+.processing-step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.processing-step.done { color: var(--success); }
+.processing-step.active { color: var(--primary); }
+
+.processing-step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.processing-step.active .processing-step-dot {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* ─── Page: Hotspot Map ──────────────────────────────────── */
+#page-hotspot .map-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--space-5);
+}
+
+#map-container {
+  height: 520px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg-surface-2);
+}
+
+.map-controls {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.time-slider-wrapper {
+  flex: 1;
+  min-width: 200px;
+}
+
+.time-slider-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-1);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ─── Page: Analytics ────────────────────────────────────── */
+#page-analytics .analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+#page-analytics .peak-grid-wrapper {
+  overflow-x: auto;
+}
+
+/* Time heatmap grid */
+.heatmap-time-grid {
+  display: grid;
+  grid-template-columns: 80px repeat(24, minmax(28px, 1fr));
+  gap: 3px;
+  min-width: 700px;
+}
+
+.heatmap-day-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.heatmap-hour-label {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding-bottom: var(--space-1);
+}
+
+.heatmap-cell {
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+  position: relative;
+}
+
+.heatmap-cell:hover {
+  transform: scale(1.15);
+  z-index: 2;
+}
+
+/* ─── Page: License Plates ───────────────────────────────── */
+#page-plates .plates-toolbar {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--space-5);
+}
+
+.plates-count-tag {
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* ─── Page: Enforcement ──────────────────────────────────── */
+#page-enforcement .enforcement-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+.risk-formula {
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.risk-formula-equation {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  line-height: 2;
+  margin-bottom: var(--space-4);
+}
+
+.risk-formula-equation span {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.risk-param {
+  margin-bottom: var(--space-4);
+}
+
+.risk-param-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.risk-param-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.risk-param-value {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--primary);
+  font-family: var(--font-mono);
+}
+
+/* Recommendation list */
+.recommendation-item {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--bg-surface-2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  margin-bottom: var(--space-3);
+  transition: all var(--transition-fast);
+}
+
+.recommendation-item:hover {
+  border-color: var(--border-bright);
+  background: var(--bg-surface-3);
+}
+
+.recommendation-priority {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary-dim);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.recommendation-priority.critical {
+  background: var(--danger-dim);
+  color: var(--danger);
+}
+
+.recommendation-body { flex: 1; min-width: 0; }
+
+.recommendation-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.recommendation-detail {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ─── Page: Predictions ──────────────────────────────────── */
+#page-predictions .predictions-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-5);
+}
+
+.weather-factor-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-surface-2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  margin-bottom: var(--space-2);
+}
+
+.weather-factor-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.weather-factor-info { flex: 1; }
+
+.weather-factor-name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.weather-factor-impact {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.weather-factor-value {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--warning);
+  font-family: var(--font-mono);
+}
+
+/* ─── Page: Evidence ─────────────────────────────────────── */
+#page-evidence .evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+
+/* ─── Page: Reports ──────────────────────────────────────── */
+#page-reports .report-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+#page-reports .report-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+/* ─── Leaflet Overrides ──────────────────────────────────── */
+.leaflet-container {
+  background: #0d1117 !important;
+  font-family: var(--font-sans) !important;
+}
+
+.leaflet-tile {
+  filter: brightness(0.7) saturate(0.7) hue-rotate(200deg);
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--bg-surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+  color: var(--text-primary) !important;
+}
+
+.leaflet-popup-content {
+  color: var(--text-primary) !important;
+  font-family: var(--font-sans) !important;
+  font-size: 0.8125rem !important;
+  margin: var(--space-3) var(--space-4) !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--bg-surface) !important;
+}
+
+.leaflet-control-zoom a {
+  background: var(--bg-surface) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border) !important;
+}
+
+.map-popup-title {
+  font-weight: 700;
+  font-size: 0.875rem;
+  margin-bottom: var(--space-2);
+  color: var(--primary);
+}
+
+.map-popup-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: 3px;
+}
+
+.map-popup-key { color: var(--text-muted); }
+.map-popup-val { font-weight: 600; color: var(--text-primary); }
+
+/* ─── Responsive Breakpoints ─────────────────────────────── */
+@media (max-width: 1280px) {
+  #page-dashboard .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  #page-detection .violation-types-grid { grid-template-columns: repeat(4, 1fr); }
+  #page-evidence .evidence-grid { grid-template-columns: repeat(2, 1fr); }
+  #page-reports .report-summary-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 1024px) {
+  :root { --sidebar-width: 220px; }
+  #page-dashboard .main-grid { grid-template-columns: 1fr; }
+  #page-hotspot .map-layout { grid-template-columns: 1fr; }
+  #page-enforcement .enforcement-layout { grid-template-columns: 1fr; }
+  #page-predictions .predictions-layout { grid-template-columns: 1fr; }
+  #page-detection .detection-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  :root { --sidebar-width: 0px; }
+  .sidebar { transform: translateX(-100%); }
+  .main-content { margin-left: 0; width: 100%; padding: var(--space-4); }
+  .topbar { left: 0; }
+  #page-dashboard .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  #page-analytics .analytics-grid { grid-template-columns: 1fr; }
+  #page-detection .violation-types-grid { grid-template-columns: repeat(2, 1fr); }
+  #page-evidence .evidence-grid { grid-template-columns: 1fr; }
+  #page-reports .report-layout { grid-template-columns: 1fr; }
+}
